@@ -11,26 +11,17 @@ import {Auction} from "../src/Auction.sol";
 
 contract AuctionTest is Test {
     // From Auction smart contract.
-    uint256 public constant DECAY_FACTOR = 2 * 1e18; // 2.0
+    uint256 public constant DECAY_FACTOR = 2 * 1e18;            // 2.0
     uint256 public constant INCREMENT_RATIO_PER_BID = 5 * 1e16; // 5%
-    uint256 public constant PROTOCOL_INTEREST = 2 * 1e16; // 2%
-    uint32 public constant MINIMUM_AUCTION_TIME_PERIOD = 3600; // 1 day
+    uint256 public constant PROTOCOL_INTEREST = 2 * 1e16;       // 2%
+    uint32 public constant MINIMUM_AUCTION_TIME_PERIOD = 3600;  // 1 day
     uint256 public constant BIDDERS_OFFER_CONSTANT_DELTA = 0.2 ether;
-
     uint256 public constant UNIX_START_AUCTION_TIME = 1727728201; // Oct 01 2024 00:00:01
 
-    Auction public auction; // 0x4881AFD14A3A467dc0A33a3A3eE7Bd52633206fd
-    ERC20Mock public mock_token; // 0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f
-    ERC721Mock public mock_nft; // 0x2e234DAe75C793f67A35089C9d99245E1C58470b
-    address public factory_addr; // 0xF002aAa653348bBa3A37b25598d28DA99fAff0aA
-
-    event withdrawSucceeded(address indexed from, address indexed to, uint256 indexed amount, bytes data);
-    event ProposalAdded(address bidder, uint256 bid_offer);
-    event fallbackEmitted(address caller);
-    event receiveEmitted(address caller);
-    event BiddersDrawWinnerSelected(address winner);
-    event RequestSent(uint256 requestId, uint32 numWords);
-    event RequestFulfilled(uint256 requestId, uint256[] randomWords);
+    Auction public auction;         // 0x4881AFD14A3A467dc0A33a3A3eE7Bd52633206fd
+    ERC20Mock public mock_token;    // 0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f
+    ERC721Mock public mock_nft;     // 0x2e234DAe75C793f67A35089C9d99245E1C58470b
+    address public factory_addr;    // 0xF002aAa653348bBa3A37b25598d28DA99fAff0aA
 
     // roles
     address public chainlink_subs_owner;
@@ -46,7 +37,7 @@ contract AuctionTest is Test {
     uint256 public auction_token_prize_amount;
 
     function setUp() public {
-        factory_addr = makeAddr("factory_addr"); // 0xF002aAa653348bBa3A37b25598d28DA99fAff0aA
+        factory_addr = makeAddr("factory_addr");                    // 0xF002aAa653348bBa3A37b25598d28DA99fAff0aA
         // roles
         chainlink_subs_owner = makeAddr("chainlink_subs_owner");    // 0x1385CF5FB06D4176F52aC2fcd49139441001f35e
         auction_owner = makeAddr("auction_owner");                  // 0xF114a6A8b3865069b48f1049c68257B44829Fe26
@@ -57,8 +48,8 @@ contract AuctionTest is Test {
         forth_bidder = makeAddr("forth_bidder");                    // 0x8E20c078053a4F0f99fcD64322B4B0a0e07b0F45
         fifth_bidder = makeAddr("fifth_bidder");                    // 0xc6E6234895eDf4c0efFA1E80DC37C84D1d0C850f
 
-        init_price = 1e18; // 1 ETH
-        auction_token_prize_amount = 1e17; // assume 0.1 ETH as prize
+        init_price = 1e18;                                          // 1 ETH
+        auction_token_prize_amount = 1e17;                          // assume 0.1 ETH as prize
 
         mock_token = new ERC20Mock();
         mock_nft = new ERC721Mock();
@@ -84,7 +75,7 @@ contract AuctionTest is Test {
         mock_token.mint(address(auction), auction_token_prize_amount);
     }
 
-    
+
     modifier AuctionStarted() {
         vm.startPrank(auction_owner);
         mock_nft.approve(address(auction), 0);
@@ -98,6 +89,7 @@ contract AuctionTest is Test {
     function test_initialize() public view {
         assertEq(auction.owner(), chainlink_subs_owner);
         assertEq(auction.getAuction().auction_owner, auction_owner);
+        assertFalse(auction.getAuction().isDrew);
     }
 
     function testStartAuctionWithValidCaller() public {
