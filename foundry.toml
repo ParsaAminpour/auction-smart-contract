@@ -5,7 +5,8 @@ libs = ["lib"]
 remappings = ['@openzeppelin/contracts=lib/openzeppelin-contracts/contracts',
               '@openzeppelin/contracts-upgradeable=lib/openzeppelin-contracts-upgradeable/contracts',
               '@prb-math/contracts=lib/prb-math/src',
-              '@solmate/src=lib/solmate/src']
+              '@solmate/src=lib/solmate/src',
+              '@chainlink/contracts=lib/chainlink/contracts/src/v0.8']
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
 [invariant]
 runs = 128
