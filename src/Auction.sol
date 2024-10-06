@@ -255,7 +255,7 @@ contract Auction is ReentrancyGuard, IERC721Receiver, Pausable, VRFConsumerBaseV
 
     /// @notice performing a draw among the bidders based on their accumulated funds inside the contract.
     /// @notice for more details about the calculations step by step please visit: 
-    ///     https://github.com/ParsaAminpour/auction-smart-contract/calculation.ipynb
+    ///     https://github.com/ParsaAminpour/auction-smart-contract/blob/main/calculation.ipynb
     function startDraw() external nonReentrant onlyOwner auctionIsClosed {
         uint256 bidders_amount = bidders_offer.length();
         address winner;
